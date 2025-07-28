@@ -11,7 +11,8 @@ const PostCategory = sequelize.define('PostCategory', {
   }
 }, {
   tableName: 'post_categories',
-  timestamps: true
+  timestamps: true,
+  underscored: true // 启用下划线转换
 });
 
 // 关联关系在 index.js 中统一管理

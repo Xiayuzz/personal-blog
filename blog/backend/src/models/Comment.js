@@ -38,18 +38,11 @@ const Comment = sequelize.define('Comment', {
   status: {
     type: DataTypes.ENUM('pending', 'approved', 'rejected'),
     defaultValue: 'pending'
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
   }
 }, {
   tableName: 'comments',
-  underscored: true
+  timestamps: true,
+  underscored: true // 启用下划线转换
 });
 
 module.exports = Comment; 

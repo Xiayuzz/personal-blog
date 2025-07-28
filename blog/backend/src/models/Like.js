@@ -22,18 +22,11 @@ const Like = sequelize.define('Like', {
       model: 'posts',
       key: 'id'
     }
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
   }
 }, {
   tableName: 'likes',
-  underscored: true,
+  timestamps: true,
+  underscored: true, // 启用下划线转换
   indexes: [
     {
       unique: true,

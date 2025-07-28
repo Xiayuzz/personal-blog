@@ -29,17 +29,18 @@ const PostTag = sequelize.define('PostTag', {
   }
 }, {
   tableName: 'post_tags',
-  timestamps: false,
+  timestamps: true,
+  underscored: true, // 启用下划线转换
   indexes: [
     {
       unique: true,
-      fields: ['postId', 'tagId']
+      fields: ['post_id', 'tag_id']
     },
     {
-      fields: ['postId']
+      fields: ['post_id']
     },
     {
-      fields: ['tagId']
+      fields: ['tag_id']
     }
   ]
 });
