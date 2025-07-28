@@ -41,7 +41,12 @@ const connectDB = async () => {
   } catch (error) {
     console.error('Database connection error:', error);
     console.error('Error stack:', error.stack);
-    process.exit(1);
+    // 在生产环境中，不要因为数据库连接失败而退出程序
+    if (process.env.NODE_ENV === 'production') {
+      console.log('Continuing without database connection...');
+    } else {
+      process.exit(1);
+    }
   }
 };
 

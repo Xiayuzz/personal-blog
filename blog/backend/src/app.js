@@ -19,8 +19,11 @@ const userRoutes = require('./routes/users');
 
 const app = express();
 
-// 连接数据库
-connectDB();
+// 连接数据库（不阻塞应用程序启动）
+connectDB().catch(error => {
+  console.error('Database connection failed during startup:', error);
+  console.log('Application will continue without database connection...');
+});
 
 // 中间件
 app.use(helmet({
@@ -117,6 +120,17 @@ app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    message: 'Service is running'
+  });
+});
+
+// 根路径健康检查
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    message: '个人博客API服务运行正常',
+    timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
 });
@@ -143,8 +157,30 @@ app.get('/', (req, res) => {
 
 // 错误处理中间件
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: '服务器内部错误' });
+  console.error('Error occurred:', err);
+  console.error('Error stack:', err.stack);
+  res.status(500).json({ 
+    message: '服务器内部错误',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
+});
+
+// 未捕获的异常处理
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  console.error('Error stack:', err.stack);
+  // 在生产环境中，不要立即退出
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // 在生产环境中，不要立即退出
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
 });
 
 // 404 处理
