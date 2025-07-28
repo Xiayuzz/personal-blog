@@ -138,12 +138,12 @@ CREATE TABLE IF NOT EXISTS system_settings (
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- 插入默认管理员账户
+-- 插入默认管理员账户（密码：123456）
 INSERT INTO users (username, email, password, role, is_active, created_at, updated_at) 
 VALUES (
     'xiayuzz', 
     'admin@xiayuzz.com', 
-    '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- 密码: 123456
+    '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J/HS.iQeO', -- 密码: 123456
     'admin', 
     1, 
     NOW(), 
