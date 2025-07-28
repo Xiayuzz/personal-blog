@@ -41,17 +41,16 @@ const User = sequelize.define('User', {
   },
   role: {
     type: DataTypes.ENUM('admin', 'author', 'user'),
-    defaultValue: 'user',
-    allowNull: false
+    defaultValue: 'user'
   },
   isActive: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true,
-    field: 'isActive' // 明确指定字段名
+    defaultValue: true
   }
 }, {
   tableName: 'users',
-  underscored: false, // 禁用自动下划线转换
+  timestamps: true,
+  underscored: true, // 启用下划线转换
   hooks: {
     beforeCreate: async (user) => {
       if (user.password) {

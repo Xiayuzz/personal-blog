@@ -40,17 +40,16 @@ const Category = sequelize.define('Category', {
   },
   isActive: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true,
-    field: 'isActive'
+    defaultValue: true
   },
   sortOrder: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
-    field: 'sortOrder'
+    defaultValue: 0
   }
 }, {
   tableName: 'categories',
-  underscored: false, // 禁用自动下划线转换
+  timestamps: true,
+  underscored: true, // 启用下划线转换
   hooks: {
     beforeCreate: (category) => {
       if (!category.slug) {

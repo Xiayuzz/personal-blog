@@ -32,8 +32,7 @@ const Post = sequelize.define('Post', {
   },
   featuredImage: {
     type: DataTypes.STRING(255),
-    allowNull: true,
-    field: 'featuredImage'
+    allowNull: true
   },
   status: {
     type: DataTypes.ENUM('draft', 'published', 'archived'),
@@ -42,28 +41,23 @@ const Post = sequelize.define('Post', {
   },
   publishedAt: {
     type: DataTypes.DATE,
-    allowNull: true,
-    field: 'publishedAt'
+    allowNull: true
   },
   viewCount: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
-    field: 'viewCount'
+    defaultValue: 0
   },
   likeCount: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
-    field: 'likeCount'
+    defaultValue: 0
   },
   commentCount: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
-    field: 'commentCount'
+    defaultValue: 0
   },
   authorId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    field: 'authorId',
     references: {
       model: 'users',
       key: 'id'
@@ -71,7 +65,8 @@ const Post = sequelize.define('Post', {
   }
 }, {
   tableName: 'posts',
-  underscored: false, // 禁用自动下划线转换
+  timestamps: true,
+  underscored: true, // 启用下划线转换
   hooks: {
     beforeCreate: (post) => {
       if (post.status === 'published' && !post.publishedAt) {
