@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS comments (
   post_id INT NOT NULL,
   author_id INT NOT NULL,
   parent_id INT NULL,
-  is_active TINYINT(1) DEFAULT 1,
+  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
@@ -177,6 +177,7 @@ CREATE INDEX idx_posts_published_at ON posts(published_at);
 CREATE INDEX idx_posts_author_id ON posts(author_id);
 CREATE INDEX idx_comments_post_id ON comments(post_id);
 CREATE INDEX idx_comments_author_id ON comments(author_id);
+CREATE INDEX idx_comments_status ON comments(status);
 CREATE INDEX idx_likes_user_id ON likes(user_id);
 CREATE INDEX idx_likes_post_id ON likes(post_id);
 CREATE INDEX idx_categories_is_active ON categories(is_active);
