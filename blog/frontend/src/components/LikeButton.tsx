@@ -11,7 +11,7 @@ interface LikeButtonProps {
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({ postId, initialLikeStatus }) => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const { showSuccess, showError } = useToasts();
   const [likeStatus, setLikeStatus] = useState<LikeStatus>({ liked: false, likeCount: 0 });
   const [loading, setLoading] = useState(false);

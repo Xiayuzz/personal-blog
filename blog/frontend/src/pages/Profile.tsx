@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import { apiClient } from '../lib/api';
 import { Edit3, Save, X, Camera } from 'lucide-react';
@@ -11,8 +10,7 @@ const Profile = () => {
   const { user, updateProfile, isLoading } = useAuthStore()
   const [isEditing, setIsEditing] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const { toasts, removeToast, showSuccess, showError } = useToasts()
+  const { showSuccess, showError } = useToasts()
   const [formData, setFormData] = useState({
     username: user?.username || '',
     email: user?.email || '',
@@ -43,36 +41,7 @@ const Profile = () => {
     }
   }
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
 
-    // 验证文件类型
-    if (!file.type.startsWith('image/')) {
-      showError('文件类型错误', '请选择图片文件')
-      return
-    }
-
-    // 验证文件大小 (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      showError('文件大小错误', '图片大小不能超过5MB')
-      return
-    }
-
-    setIsUploading(true)
-    try {
-      const response = await apiClient.uploadImage(file)
-      
-      // 更新用户头像
-      await updateProfile({ avatar: response.url })
-      
-      showSuccess('上传成功', '头像已更新')
-    } catch (error: any) {
-      showError('上传失败', error.response?.data?.message || '头像上传失败')
-    } finally {
-      setIsUploading(false)
-    }
-  }
 
   const handleEditClick = () => {
     setFormData({

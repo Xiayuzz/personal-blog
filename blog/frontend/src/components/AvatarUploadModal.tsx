@@ -16,14 +16,7 @@ interface CropArea {
 
 const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({ open, onClose, onUpload }) => {
   const [image, setImage] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const onCropComplete = useCallback((_: any, croppedAreaPixels: CropArea) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -35,14 +28,16 @@ const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({ open, onClose, on
   };
 
   const handleCrop = async () => {
-    if (!image || !croppedAreaPixels) return;
+    if (!image) return;
     setLoading(true);
     try {
-      const croppedBlob = await getCroppedImg(image, croppedAreaPixels);
-      onUpload(new File([croppedBlob], 'avatar.jpg', { type: 'image/jpeg' }));
+      // 直接上传原图，不进行裁剪
+      const response = await fetch(image);
+      const blob = await response.blob();
+      onUpload(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
       onClose();
     } catch (e) {
-      alert('裁剪失败，请重试');
+      alert('上传失败，请重试');
     } finally {
       setLoading(false);
     }

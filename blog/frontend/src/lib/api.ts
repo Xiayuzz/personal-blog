@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { 
   User, 
   AuthResponse, 
@@ -13,7 +13,6 @@ import {
   DashboardData,
   SystemSettings,
   UploadedFile,
-  ApiResponse,
   Like,
   LikeStatus
 } from '@/types';

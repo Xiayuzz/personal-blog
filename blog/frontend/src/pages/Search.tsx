@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Search as SearchIcon, Filter, Calendar, Eye, User, Tag, X } from 'lucide-react';
+import { Search as SearchIcon, Filter, Calendar, Eye, User, Tag as TagIcon, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { apiClient } from '@/lib/api';
-import { Post, Category, Tag as TagType } from '@/types';
+import { Post, Category, Tag } from '@/types';
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -204,7 +204,7 @@ const Search = () => {
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {Array.isArray(tagsData) && tagsData.length > 0 ? (
-                    tagsData.map((tag: TagType) => (
+                    tagsData.map((tag: Tag) => (
                       <button
                         key={tag.id}
                         onClick={() => handleTagToggle(tag.id.toString())}

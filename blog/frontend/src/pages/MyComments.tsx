@@ -6,7 +6,7 @@ import { useToasts } from '@/components/ToastManager';
 import { Link } from 'react-router-dom';
 
 const MyComments = () => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const { showError } = useToasts();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,7 @@ const MyComments = () => {
                 <div className="flex-1">
                   <div className="text-gray-800 mb-1">{comment.content}</div>
                   <div className="text-xs text-gray-400 mb-1">{new Date(comment.createdAt).toLocaleString()}</div>
-                  <Link to={`/posts/${comment.post?.slug || comment.postId}`} className="text-blue-600 hover:underline text-sm">
+                  <Link to={`/posts/${comment.post?.slug || comment.post?.id}`} className="text-blue-600 hover:underline text-sm">
                     查看原文：{comment.post?.title || '文章已删除'}
                   </Link>
                 </div>

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import apiClient from '@/lib/api';
-import { Like, Post } from '@/types';
+import { Like } from '@/types';
 import { useAuthStore } from '@/stores/authStore';
 import { useToasts } from '@/components/ToastManager';
 import { Link } from 'react-router-dom';
 
 const MyLikes = () => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const { showError } = useToasts();
   const [likes, setLikes] = useState<Like[]>([]);
   const [loading, setLoading] = useState(false);

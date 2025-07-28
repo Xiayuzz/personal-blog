@@ -5,7 +5,6 @@ import { Calendar, User, Eye, Clock, Tag, FolderOpen, ArrowLeft, FileText } from
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import apiClient from '@/lib/api'
-import { Post } from '@/types'
 import LikeButton from '@/components/LikeButton';
 import CommentSection from '@/components/CommentSection';
 
@@ -181,7 +180,7 @@ const PostDetail = () => {
                   transition={{ delay: 0.2 }}
                   className="mb-6"
                 >
-                  {post.categories.map((category, index) => (
+                  {post.categories.map((category) => (
                     <span
                       key={category.id}
                       className="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full mr-2 mb-2"
