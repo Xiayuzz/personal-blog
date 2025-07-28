@@ -188,9 +188,8 @@ const Home = () => {
               有任何问题或建议，欢迎通过以下方式联系我。
             </p>
             <div className="space-y-2 text-sm text-gray-600">
-              <p>📧 Email: contact@example.com</p>
-              <p>🐦 Twitter: @example</p>
-              <p>💼 GitHub: github.com/example</p>
+              <p> Email: 17665739176@163.com</p>
+              <p> GitHub: github.com/Xiayuzz</p>
             </div>
           </div>
         </motion.div>
