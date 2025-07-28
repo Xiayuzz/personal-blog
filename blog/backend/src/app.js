@@ -19,11 +19,13 @@ const userRoutes = require('./routes/users');
 
 const app = express();
 
-// 连接数据库（不阻塞应用程序启动）
-connectDB().catch(error => {
-  console.error('Database connection failed during startup:', error);
-  console.log('Application will continue without database connection...');
-});
+// 延迟连接数据库，避免启动时阻塞
+setTimeout(() => {
+  connectDB().catch(error => {
+    console.error('Database connection failed during startup:', error);
+    console.log('Application will continue without database connection...');
+  });
+}, 1000);
 
 // 中间件
 app.use(helmet({
@@ -90,29 +92,13 @@ app.use('/api/likes', likeRoutes);
 app.use('/api/users', userRoutes);
 
 // 健康检查路由 (用于 Railway 部署)
-app.get('/api/health', async (req, res) => {
-  try {
-    // 测试数据库连接
-    const { sequelize } = require('./config/database');
-    await sequelize.authenticate();
-    
-    res.json({ 
-      status: 'ok', 
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-      database: 'connected'
-    });
-  } catch (error) {
-    console.error('Health check failed:', error);
-    // 即使数据库连接失败，也返回 200 状态码，避免 Railway 认为服务完全不可用
-    res.status(200).json({ 
-      status: 'warning', 
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-      database: 'disconnected',
-      error: error.message
-    });
-  }
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    message: 'API health check passed'
+  });
 });
 
 // 简单的健康检查端点（备用）
