@@ -46,10 +46,12 @@ const User = sequelize.define('User', {
   },
   isActive: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true
+    defaultValue: true,
+    field: 'isActive' // 明确指定字段名
   }
 }, {
   tableName: 'users',
+  underscored: false, // 禁用自动下划线转换
   hooks: {
     beforeCreate: async (user) => {
       if (user.password) {

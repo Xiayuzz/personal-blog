@@ -45,20 +45,24 @@ const Tag = sequelize.define('Tag', {
   postCount: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 0
+    defaultValue: 0,
+    field: 'postCount'
   },
   isActive: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: true
+    defaultValue: true,
+    field: 'isActive'
   },
   sortOrder: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 0
+    defaultValue: 0,
+    field: 'sortOrder'
   }
 }, {
   tableName: 'tags',
+  underscored: false, // 禁用自动下划线转换
   timestamps: true,
   indexes: [
     {
