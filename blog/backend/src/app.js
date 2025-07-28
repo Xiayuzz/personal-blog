@@ -87,7 +87,33 @@ app.use('/api/likes', likeRoutes);
 app.use('/api/users', userRoutes);
 
 // 健康检查路由 (用于 Railway 部署)
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+  try {
+    // 测试数据库连接
+    const { sequelize } = require('./config/database');
+    await sequelize.authenticate();
+    
+    res.json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      database: 'connected'
+    });
+  } catch (error) {
+    console.error('Health check failed:', error);
+    // 即使数据库连接失败，也返回 200 状态码，避免 Railway 认为服务完全不可用
+    res.status(200).json({ 
+      status: 'warning', 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      database: 'disconnected',
+      error: error.message
+    });
+  }
+});
+
+// 简单的健康检查端点（备用）
+app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
@@ -129,9 +155,12 @@ app.use('*', (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`服务器运行在端口 ${PORT}`);
-  console.log(`API地址: http://localhost:${PORT}`);
-  console.log(`环境: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🚀 服务器启动成功`);
+  console.log(`📍 端口: ${PORT}`);
+  console.log(`🌐 API地址: http://localhost:${PORT}`);
+  console.log(`🔧 环境: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`📊 健康检查: http://localhost:${PORT}/api/health`);
+  console.log(`⏰ 启动时间: ${new Date().toISOString()}`);
 });
 
 module.exports = app; 
