@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Search as SearchIcon, Filter, Calendar, Eye, User, Tag, Grid3X3, X } from 'lucide-react';
+import { Search as SearchIcon, Filter, Calendar, Eye, User, Tag, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { apiClient } from '@/lib/api';
 import { Post, Category, Tag as TagType } from '@/types';

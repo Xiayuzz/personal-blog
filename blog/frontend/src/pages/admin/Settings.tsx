@@ -12,7 +12,7 @@ const AdminSettings = () => {
     postsPerPage: 10,
   })
 
-  const { data: currentSettings, isLoading } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['admin-settings'],
     queryFn: () => apiClient.getSystemSettings(),
   })

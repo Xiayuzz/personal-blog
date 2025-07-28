@@ -75,7 +75,7 @@ const CategoryPosts = () => {
                 <div className="flex items-center justify-between text-sm text-gray-500">
                   <div className="flex items-center space-x-4">
                     <span>{post.author.username}</span>
-                    <span>{new Date(post.publishedAt || post.createdAt).toLocaleDateString()}</span>
+                    <span>{post.publishedAt || post.createdAt ? new Date(post.publishedAt || post.createdAt).toLocaleDateString() : '未发布'}</span>
                     <span>👁️ {post.viewCount}</span>
                   </div>
                   <div className="flex items-center space-x-2">

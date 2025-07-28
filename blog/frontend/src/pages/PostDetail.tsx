@@ -121,7 +121,8 @@ const PostDetail = () => {
     )
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return '未知时间'
     const date = new Date(dateString)
     return date.toLocaleDateString('zh-CN', {
       year: 'numeric',
@@ -221,7 +222,7 @@ const PostDetail = () => {
                 
                 <div className="flex items-center">
                   <Calendar className="w-4 h-4 mr-2 text-green-600" />
-                  <span>{formatDate(post.publishedAt || post.createdAt)}</span>
+                  <span>{formatDate(post.publishedAt || post.createdAt || undefined)}</span>
                 </div>
                 
                 <div className="flex items-center">
