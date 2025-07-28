@@ -1,17 +1,9 @@
-import { useState, useCallback } from 'react';
-import { getCroppedImg } from '@/utils/cropImage';
+import { useState } from 'react';
 
 interface AvatarUploadModalProps {
   open: boolean;
   onClose: () => void;
   onUpload: (file: File) => void;
-}
-
-interface CropArea {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
 }
 
 const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({ open, onClose, onUpload }) => {
