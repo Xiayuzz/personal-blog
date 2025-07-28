@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import apiClient from '@/lib/api'
+import type { FormEvent } from 'react'
 
 const AdminSettings = () => {
   const [settings, setSettings] = useState({
@@ -16,7 +17,7 @@ const AdminSettings = () => {
     queryFn: () => apiClient.getSystemSettings(),
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     // TODO: 实现设置保存逻辑
     console.log('保存设置:', settings)

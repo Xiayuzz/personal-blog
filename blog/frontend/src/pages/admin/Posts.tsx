@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 import apiClient from '@/lib/api'
+import { Post } from '@/types'
 
 const AdminPosts = () => {
-  const { data: posts, isLoading } = useQuery({
+  const { data: postsData, isLoading } = useQuery({
     queryKey: ['admin-posts'],
     queryFn: () => apiClient.getPosts(),
   })
 
   if (isLoading) return <div className="text-center py-8">加载中...</div>
+
+  const posts = postsData?.data || []
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -35,7 +38,7 @@ const AdminPosts = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {posts?.map((post) => (
+            {posts.map((post: Post) => (
               <tr key={post.id}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{post.title}</div>

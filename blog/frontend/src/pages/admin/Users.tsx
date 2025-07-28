@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 import apiClient from '@/lib/api'
+import { User } from '@/types'
 
 const AdminUsers = () => {
-  const { data: users, isLoading } = useQuery({
+  const { data: usersData, isLoading } = useQuery({
     queryKey: ['admin-users'],
     queryFn: () => apiClient.getUsers(),
   })
 
   if (isLoading) return <div className="text-center py-8">加载中...</div>
+
+  const users = usersData?.data || []
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -35,7 +38,7 @@ const AdminUsers = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {users?.map((user) => (
+            {users.map((user: User) => (
               <tr key={user.id}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{user.username}</div>
