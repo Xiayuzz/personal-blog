@@ -113,14 +113,8 @@ npm start
 ```
 
 5. **访问应用**
-- 前端: http://localhost:3000
-- 后端API: http://localhost:5000
-
-## 📚 文档
-
-- [开发文档](./个人博客开发文档.md) - 详细的项目开发指南
-- [UI设计指南](./UI设计指南.md) - 设计规范和组件指南
-- [项目初始化脚本](./项目初始化脚本.md) - 快速搭建项目环境
+- 前端: http://localhost:3001
+- 后端API: http://localhost:3000
 
 ## 🎯 功能特性
 
@@ -271,9 +265,9 @@ npm start
 
 ## 📞 联系我们
 
-- 项目主页: [GitHub Repository]
+- 项目主页: [[GitHub Repository](https://github.com/Xiayuzz/personal-blog)]
 - 问题反馈: [Issues]
-- 邮箱: [your-email@example.com]
+- 邮箱: [17665739176@163.com]
 
 ---
 
