@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, Menu, X, User, LogOut, Settings, Home, FileText, Tag, Grid3X3 } from 'lucide-react';
+import { Search, Menu, X, User, LogOut, Settings, Home, FileText } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
 
 const Header = () => {

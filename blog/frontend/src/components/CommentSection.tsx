@@ -9,7 +9,7 @@ interface CommentSectionProps {
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const { showSuccess, showError } = useToasts();
   const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState('');

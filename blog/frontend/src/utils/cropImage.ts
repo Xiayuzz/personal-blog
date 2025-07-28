@@ -1,5 +1,12 @@
+interface CropArea {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 // 参考自 react-easy-crop 官方文档
-export const getCroppedImg = (imageSrc: string, pixelCrop: any): Promise<Blob> => {
+export const getCroppedImg = (imageSrc: string, pixelCrop: CropArea): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     const image = new window.Image();
     image.crossOrigin = 'anonymous';
