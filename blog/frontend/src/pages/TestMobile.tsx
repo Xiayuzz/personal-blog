@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { Link } from 'react-router-dom';
 import { User, Eye, ThumbsUp, MessageCircle, FileText, Home } from 'lucide-react';
