@@ -187,10 +187,9 @@ const Home = () => {
             <p className="text-gray-600 mb-4 text-sm sm:text-base">
               有任何问题或建议，欢迎通过以下方式联系我。
             </p>
-            <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-gray-600">
-              <p>📧 Email: 17665739176@163.com</p>
-              <p>🐦 Twitter: @example</p>
-              <p>💼 GitHub: github.com/Xiayuzz</p>
+            <div className="space-y-2 text-sm text-gray-600">
+              <p> Email: 17665739176@163.com</p>
+              <p> GitHub: github.com/Xiayuzz</p>
             </div>
           </div>
         </motion.div>
