@@ -12,6 +12,7 @@ import Search from '@/pages/Search'
 import CategoryPosts from '@/pages/CategoryPosts'
 import TagPosts from '@/pages/TagPosts'
 import TestAvatar from '@/pages/TestAvatar'
+import TestMobile from '@/pages/TestMobile'
 import AdminDashboard from '@/pages/admin/Dashboard'
 import AdminUsers from '@/pages/admin/Users'
 import AdminPosts from '@/pages/admin/Posts'
@@ -43,6 +44,7 @@ function App() {
         <Route path="categories/:slug" element={<CategoryPosts />} />
         <Route path="tags/:slug" element={<TagPosts />} />
         <Route path="test-avatar" element={<TestAvatar />} />
+        <Route path="test-mobile" element={<TestMobile />} />
       </Route>
 
       {/* 需要认证的路由 */}
