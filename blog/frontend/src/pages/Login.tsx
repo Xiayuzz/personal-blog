@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { LogIn, Mail, Lock, ArrowLeft, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
-import { validateEmail, validatePassword, FieldValidation } from '@/utils/validation'
+import { validateEmail, validatePassword } from '@/utils/validation'
 import { useToast } from '@/hooks/useToast'
 
 const Login = () => {

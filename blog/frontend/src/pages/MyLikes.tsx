@@ -1,77 +1,100 @@
-import { useEffect, useState } from 'react';
-import apiClient from '@/lib/api';
-import { Like } from '@/types';
-import { useAuthStore } from '@/stores/authStore';
-import { useToasts } from '@/components/ToastManager';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Heart, ExternalLink } from 'lucide-react'
+import { useAuthStore } from '@/stores/authStore'
+import { useToast } from '@/hooks/useToast'
+import apiClient from '@/lib/api'
+import { Like } from '@/types'
 
 const MyLikes = () => {
-  const { isAuthenticated } = useAuthStore();
-  const { showError } = useToasts();
-  const [likes, setLikes] = useState<Like[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [likes, setLikes] = useState<Like[]>([])
+  const [loading, setLoading] = useState(true)
+  const { } = useAuthStore()
+  const { showError } = useToast()
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchLikes();
-    }
-    // eslint-disable-next-line
-  }, [isAuthenticated]);
+    fetchLikes()
+  }, [])
 
   const fetchLikes = async () => {
-    setLoading(true);
     try {
-      const res = await apiClient.getUserLikes();
-      setLikes(res.data);
-    } catch (e: any) {
-      showError('获取点赞列表失败', e?.message || '请稍后重试');
+      const response = await apiClient.getUserLikes()
+      setLikes(response.data || [])
+    } catch (error) {
+      console.error('获取点赞失败:', error)
+      showError('获取点赞失败', '请稍后重试')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  if (!isAuthenticated) {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('zh-CN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+
+  if (loading) {
     return (
-      <div className="max-w-2xl mx-auto py-16 text-center text-blue-600">
-        <div className="text-4xl mb-4">👍</div>
-        <div className="text-xl font-bold mb-2">请先登录后查看你的点赞列表</div>
-        <Link to="/login" className="text-blue-500 underline">去登录</Link>
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold text-blue-700 mb-8 flex items-center">
-        <span className="mr-2">👍</span> 我的点赞列表
-        <span className="ml-2 text-base text-blue-500">({likes.length})</span>
-      </h1>
-      {loading ? (
-        <div className="text-blue-400 text-center py-8">加载中...</div>
-      ) : likes.length === 0 ? (
-        <div className="text-gray-400 text-center py-8">你还没有点赞任何文章~</div>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">我的点赞</h1>
+        <p className="text-gray-600">查看您点赞过的所有文章</p>
+      </div>
+
+      {likes.length === 0 ? (
+        <div className="text-center py-12">
+          <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">还没有点赞</h3>
+          <p className="text-gray-500">您还没有点赞过任何文章</p>
+        </div>
       ) : (
-        <ul className="space-y-6">
-          {likes.map(like => (
-            <li key={like.id} className="bg-white rounded-xl shadow p-5 flex items-center gap-4 border-l-4 border-blue-200 hover:shadow-lg transition">
-              <div className="flex-1">
-                <Link to={`/posts/${like.post?.slug || like.postId}`} className="text-lg font-bold text-blue-700 hover:underline">
-                  {like.post?.title || '文章已删除'}
-                </Link>
-                <div className="text-sm text-gray-500 mt-1">
-                  点赞时间：{new Date(like.createdAt).toLocaleString()}
+        <div className="space-y-4">
+          {likes.map((like) => (
+            <motion.div
+              key={like.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-lg shadow-sm border p-6"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="text-sm font-medium text-gray-900">
+                      {like.post?.title || '未知文章'}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {formatDate(like.createdAt)}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <a
+                      href={`/posts/${like.post?.slug || '#'}`}
+                      className="text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center space-x-1"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>查看文章</span>
+                    </a>
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-xs text-gray-400">作者：{like.post?.author?.username || '未知'}</span>
-                <span className="text-xs text-gray-400 mt-1">ID: {like.postId}</span>
-              </div>
-            </li>
+            </motion.div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default MyLikes; 
+export default MyLikes 

@@ -1,75 +1,80 @@
-import { useState, useEffect } from 'react';
-import { ThumbsUp } from 'lucide-react';
-import apiClient from '@/lib/api';
-import { LikeStatus } from '@/types';
-import { useAuthStore } from '@/stores/authStore';
-import { useToasts } from './ToastManager';
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Heart, HeartOff } from 'lucide-react'
+import { useAuthStore } from '@/stores/authStore'
+import { useToast } from '@/hooks/useToast'
+import apiClient from '@/lib/api'
 
 interface LikeButtonProps {
-  postId: number;
-  initialLikeStatus?: LikeStatus;
+  postId: number
+  initialLiked?: boolean
+  initialLikeCount?: number
+  onLikeChange?: (liked: boolean, count: number) => void
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({ postId, initialLikeStatus }) => {
-  const { isAuthenticated } = useAuthStore();
-  const { showSuccess, showError } = useToasts();
-  const [likeStatus, setLikeStatus] = useState<LikeStatus>({ liked: false, likeCount: 0 });
-  const [loading, setLoading] = useState(false);
+const LikeButton = ({ postId, initialLiked = false, initialLikeCount = 0, onLikeChange }: LikeButtonProps) => {
+  const [liked, setLiked] = useState(initialLiked)
+  const [likeCount, setLikeCount] = useState(initialLikeCount)
+  const [isLoading, setIsLoading] = useState(false)
+  const { isAuthenticated } = useAuthStore()
+  const { showSuccess, showError } = useToast()
 
   useEffect(() => {
-    if (initialLikeStatus) {
-      setLikeStatus(initialLikeStatus);
-    } else {
-      fetchLikeStatus();
-    }
-    // eslint-disable-next-line
-  }, [postId]);
-
-  const fetchLikeStatus = async () => {
-    try {
-      const status = await apiClient.getLikeStatus(postId);
-      setLikeStatus(status);
-    } catch (e) {
-      // 忽略未登录等错误
-    }
-  };
+    setLiked(initialLiked)
+    setLikeCount(initialLikeCount)
+  }, [initialLiked, initialLikeCount])
 
   const handleLike = async () => {
     if (!isAuthenticated) {
-      showError('请先登录', '登录后才能点赞');
-      return;
+      showError('请先登录', '登录后才能点赞')
+      return
     }
-    setLoading(true);
+
+    setIsLoading(true)
     try {
-      const res = await apiClient.toggleLike(postId);
-      setLikeStatus((prev) => ({
-        liked: res.liked,
-        likeCount: prev.likeCount + (res.liked ? 1 : -1)
-      }));
-      showSuccess(res.liked ? '点赞成功' : '已取消点赞');
-    } catch (e: any) {
-      showError('操作失败', e?.message || '请稍后重试');
+      if (liked) {
+        await apiClient.unlikePost(postId)
+        setLiked(false)
+        setLikeCount(prev => Math.max(0, prev - 1))
+        onLikeChange?.(false, likeCount - 1)
+        showSuccess('取消点赞成功')
+      } else {
+        await apiClient.likePost(postId)
+        setLiked(true)
+        setLikeCount(prev => prev + 1)
+        onLikeChange?.(true, likeCount + 1)
+        showSuccess('点赞成功')
+      }
+    } catch (error) {
+      console.error('点赞操作失败:', error)
+      showError('操作失败', '请稍后重试')
     } finally {
-      setLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
-    <button
-      className={`flex items-center px-4 py-2 rounded-full font-medium shadow transition-all duration-200 focus:outline-none
-        ${likeStatus.liked ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white text-blue-600 border border-blue-200 hover:bg-blue-50'}
-        ${loading ? 'opacity-60 cursor-not-allowed' : 'hover:scale-105'}
-      `}
+    <motion.button
       onClick={handleLike}
-      disabled={loading}
-      aria-pressed={likeStatus.liked}
-      title={likeStatus.liked ? '取消点赞' : '点赞'}
+      disabled={isLoading}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+        liked
+          ? 'bg-red-500 text-white hover:bg-red-600'
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+      } disabled:opacity-50 disabled:cursor-not-allowed`}
     >
-      <ThumbsUp className={`w-5 h-5 mr-2 ${likeStatus.liked ? 'text-white' : 'text-blue-500'}`} />
-      <span>{likeStatus.liked ? '已点赞' : '点赞'}</span>
-      <span className="ml-2 font-bold">{likeStatus.likeCount}</span>
-    </button>
-  );
-};
+      {liked ? (
+        <Heart className="w-5 h-5 fill-current" />
+      ) : (
+        <HeartOff className="w-5 h-5" />
+      )}
+      <span className="font-medium">
+        {liked ? '已点赞' : '点赞'} ({likeCount})
+      </span>
+    </motion.button>
+  )
+}
 
-export default LikeButton; 
+export default LikeButton 
