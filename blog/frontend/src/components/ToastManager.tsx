@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import Toast from './Toast'
+import Toast, { ToastProps } from './Toast'
 
 export interface ToastData {
   id: string
@@ -11,22 +11,28 @@ export interface ToastData {
 
 interface ToastManagerProps {
   toasts: ToastData[]
-  onClose: (id: string) => void
+  onRemoveToast: (id: string) => void
 }
 
-const ToastManager = ({ toasts, onClose }: ToastManagerProps) => {
+const ToastManager = ({ toasts, onRemoveToast }: ToastManagerProps) => {
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2">
       {toasts.map((toast) => (
         <Toast
           key={toast.id}
-          {...toast}
-          onClose={onClose}
+          id={toast.id}
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          duration={toast.duration}
+          onClose={onRemoveToast}
         />
       ))}
     </div>
   )
 }
+
+export default ToastManager
 
 // Hook for using toasts
 export const useToasts = () => {
@@ -65,6 +71,4 @@ export const useToasts = () => {
     showWarning,
     showInfo
   }
-}
-
-export default ToastManager 
+} 
